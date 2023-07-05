@@ -56,13 +56,20 @@ async def gen_mediainfo(message, link=None, media=None, mmsg=None):
 
 def parseinfo(out):
     tc = ''
+    pre_added = False
     for line in out.split('\n'):
         if line.startswith('General'):
-            tc += '</pre><br>'
+            if pre_added:
+                tc += '</pre><br>'
+                pre_added = False
             tc += f"<h4>{line.replace('Text', 'Subtitle')}</h4>"
-        tc += '<br><pre>'
-        tc += line + '\n'
-    tc += '</pre><br>'
+        else:
+            if not pre_added:
+                tc += '<br><pre>'
+                pre_added = True
+            tc += line + '\n'
+    if pre_added:
+        tc += '</pre><br>'
     return tc
 
 
