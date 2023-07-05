@@ -1103,7 +1103,7 @@ async def edit_bot_settings(client, query):
 async def bot_settings(_, message):
     msg, button = await get_buttons()
     globals()['START'] = 0
-    await sendMessage(message, msg, button, 'IMAGES')
+    await sendMessage(message, msg, button)
 
 
 bot.add_handler(MessageHandler(bot_settings, filters=command(
