@@ -42,7 +42,7 @@ async def gen_mediainfo(message, link=None, media=None, mmsg=None):
                     async with aiopen(des_path, "ab") as f:
                         await f.write(chunk)
         stdout, _, _ = await cmd_exec(ssplit(f'mediainfo "{des_path}"'))
-        tc = f"<h4>📌 {ospath.basename(des_path)}</h4><br><br>"
+        tc = f"<h4>{ospath.basename(des_path)}</h4><br><br>"
         if len(stdout) != 0:
             tc += parseinfo(stdout)
     except Exception as e:
@@ -54,23 +54,14 @@ async def gen_mediainfo(message, link=None, media=None, mmsg=None):
     await temp_send.edit(f"<b>MediaInfo:</b>\n\n➲ <b>Link :</b> https://graph.org/{link_id}", disable_web_page_preview=False)
 
 
-section_dict = {'General': '🗒', 'Video': '🎞', 'Audio': '🔊', 'Text': '🔠', 'Menu': '🗃'}
 def parseinfo(out):
     tc = ''
-    trigger = False
     for line in out.split('\n'):
-        for section, emoji in section_dict.items():
-            if line.startswith(section):
-                trigger = True
-                if not line.startswith('General'):
-                    tc += '</pre><br>'
-                tc += f"<h4>{emoji} {line.replace('Text', 'Subtitle')}</h4>"
-                break
-        if trigger:
-            tc += '<br><pre>'
-            trigger = False
-        else:
-            tc += line + '\n'
+        if line.startswith('General'):
+            tc += '</pre><br>'
+            tc += f"<h4>{line.replace('Text', 'Subtitle')}</h4>"
+        tc += '<br><pre>'
+        tc += line + '\n'
     tc += '</pre><br>'
     return tc
 
