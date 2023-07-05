@@ -18,7 +18,7 @@ from bot.helper.ext_utils.telegraph_helper import telegraph
 
 
 async def gen_mediainfo(message, link=None, media=None, mmsg=None):
-    temp_send = await sendMessage(message, '<i>Generating MediaInfo...</i>')
+    temp_send = await sendMessage(message, 'Generating MediaInfo...')
     try:
         path = "Mediainfo/"
         if not await aiopath.isdir(path):
@@ -50,26 +50,28 @@ async def gen_mediainfo(message, link=None, media=None, mmsg=None):
         await editMessage(temp_send, f"MediaInfo Stopped due to {str(e)}")
     finally:
         await aioremove(des_path)
-    link_id = (await telegraph.create_page(title='MediaInfo X', content=tc))["path"]
-    await temp_send.edit(f"<b>MediaInfo:</b>\n\n➲ <b>Link :</b> https://graph.org/{link_id}", disable_web_page_preview=False)
+    link_id = (await telegraph.create_page(title='MediaInfo', content=tc))["path"]
+    await temp_send.edit(f"<b>MediaInfo:</b>\n\n<b>Link :</b> https://graph.org/{link_id}", disable_web_page_preview=True)
 
 
+section_dict = {'General': '🗒', 'Video': '🎞', 'Audio': '🔊', 'Text': '🔠', 'Menu': '🗃'}
 def parseinfo(out):
     tc = ''
-    pre_added = False
+    trigger = False
     for line in out.split('\n'):
-        if line.startswith('General'):
-            if pre_added:
-                tc += '</pre><br>'
-                pre_added = False
-            tc += f"<h4>{line.replace('Text', 'Subtitle')}</h4>"
+        for section, emoji in section_dict.items():
+            if line.startswith(section):
+                trigger = True
+                if not line.startswith('General'):
+                    tc += '</pre><br>'
+                tc += f"<h4>{line.replace('Text', 'Subtitle')}</h4>"
+                break
+        if trigger:
+            tc += '<br><pre>'
+            trigger = False
         else:
-            if not pre_added:
-                tc += '<br><pre>'
-                pre_added = True
             tc += line + '\n'
-    if pre_added:
-        tc += '</pre><br>'
+    tc += '</pre><br>'
     return tc
 
 
