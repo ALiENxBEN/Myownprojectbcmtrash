@@ -199,7 +199,6 @@ async def format_filename(file_, user_id, dirpath=None, isMirror=False):
     lcaption = config_dict['LEECH_FILENAME_CAPTION'] if (val:=user_dict.get('lcaption', '')) == '' else val
  
     prefile_ = file_
-    # SD-Style V2 ~ WZML-X
     if file_.startswith('www'): #Remove all www.xyz.xyz domains
         file_ = ' '.join(file_.split()[1:])
         
