@@ -462,7 +462,6 @@ def uploadee(url: str) -> str:
 def terabox(url):
     sess = session()
     sess.get(url)
-
     headers = {
         'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/112.0',
         'Accept': 'application/json, text/plain, */*',
@@ -476,8 +475,10 @@ def terabox(url):
     json_data = {'url': url}
     response = sess.post('https://3es.vercel.app/api/getDetail', headers=headers, json=json_data).json()
 
-    if response["result"]:response = response["data"]
-    else: return None
+    if response["result"]:
+        response = response["data"]
+    else: 
+        return None
 
     json_data = {
         'shareid': response["shareid"],
@@ -488,8 +489,10 @@ def terabox(url):
     }
 
     res = sess.post('https://3es.vercel.app/api/getDownloadUrl', headers=headers, json=json_data).json()
-    if res["result"]: return res["data"]
-    else: return 'ERROR: Link not found'
+    if res["result"]:
+        return res["data"]
+    else:
+        return DirectDownloadLinkException('ERROR: Link not found')
 
 
 def filepress(url):
