@@ -87,14 +87,14 @@ async def start(client, message):
         encrypted_url = message.command[1]
         input_token, pre_uid = (b64decode(encrypted_url.encode()).decode()).split('&&')
         if int(pre_uid) != userid:
-            return await sendMessage(message, '<b>Temporary Token is not yours!</b>\n\n<i>Kindly generate your own.</i>')
+            return await sendMessage(message, '<b>This token is not for you!</b>\n\n<i>Please generate your own.</i>')
         data = user_data.get(userid, {})
         if 'token' not in data or data['token'] != input_token:
-            return await sendMessage(message, '<b>This token already used!</b>\n\n<i>Kindly collect a new one.</i>')
+            return await sendMessage(message, '<b>This token has already been used!</b>\n\n<i>Please get a new one.</i>')
         buttons.ibutton('Activate token', f'pass {input_token}', 'header')
         reply_markup = buttons.build_menu(2)
-        msg = 'Your token has successfully generated!\n\n'
-        msg += f'It will valid for {format_validity_time(int(config_dict["TOKEN_TIMEOUT"]))}'
+        msg = 'Your token has been successfully generated!\n\n'
+        msg += f'It will be valid for {format_validity_time(int(config_dict["TOKEN_TIMEOUT"]))}'
         return await sendMessage(message, msg, reply_markup)
     elif await CustomFilters.authorized(client, message):
         start_string = BotTheme('ST_MSG', help_command=f"/{BotCommands.HelpCommand}")
@@ -146,7 +146,7 @@ async def wzmlxcb(_, query):
     user_id = query.from_user.id
     data = query.data.split()
     if user_id != int(data[1]):
-        return await query.answer(text="Not Message User!", show_alert=True)
+        return await query.answer(text="You're not sudo!", show_alert=True)
     if data[2] == "logdisplay":
         await query.answer()
         async with aiopen('log.txt', 'r') as f:
@@ -205,37 +205,37 @@ async def search_images():
 
 
 help_string = f'''
-NOTE: Try each command without any argument to see more detalis.
-/{BotCommands.MirrorCommand[0]} or /{BotCommands.MirrorCommand[1]}: Start mirroring to Google Drive.
-/{BotCommands.QbMirrorCommand[0]} or /{BotCommands.QbMirrorCommand[1]}: Start Mirroring to Google Drive using qBittorrent.
-/{BotCommands.YtdlCommand[0]} or /{BotCommands.YtdlCommand[1]}: Mirror yt-dlp supported link.
-/{BotCommands.LeechCommand[0]} or /{BotCommands.LeechCommand[1]}: Start leeching to Telegram.
-/{BotCommands.QbLeechCommand[0]} or /{BotCommands.QbLeechCommand[1]}: Start leeching using qBittorrent.
-/{BotCommands.YtdlLeechCommand[0]} or /{BotCommands.YtdlLeechCommand[1]}: Leech yt-dlp supported link.
-/{BotCommands.CloneCommand} [drive_url]: Copy file/folder to Google Drive.
-/{BotCommands.CountCommand} [drive_url]: Count file/folder of Google Drive.
-/{BotCommands.DeleteCommand} [drive_url]: Delete file/folder from Google Drive (Only Owner & Sudo).
-/{BotCommands.UserSetCommand} [query]: Users settings.
+NOTE: Try each command without any arguments to see more details.
+/{BotCommands.MirrorCommand[0]} or /{BotCommands.MirrorCommand[1]}: Starts mirroring to Google Drive.
+/{BotCommands.QbMirrorCommand[0]} or /{BotCommands.QbMirrorCommand[1]}: Starts mirroring to Google Drive using qBittorrent.
+/{BotCommands.YtdlCommand[0]} or /{BotCommands.YtdlCommand[1]}: Mirrors links supported by yt-dlp.
+/{BotCommands.LeechCommand[0]} or /{BotCommands.LeechCommand[1]}: Starts leeching to Telegram.
+/{BotCommands.QbLeechCommand[0]} or /{BotCommands.QbLeechCommand[1]}: Starts leeching using qBittorrent.
+/{BotCommands.YtdlLeechCommand[0]} or /{BotCommands.YtdlLeechCommand[1]}: Leeches links supported by yt-dlp.
+/{BotCommands.CloneCommand} [drive_url]: Copies files/folders to Google Drive.
+/{BotCommands.CountCommand} [drive_url]: Counts files/folders in Google Drive.
+/{BotCommands.DeleteCommand} [drive_url]: Deletes files/folders from Google Drive (Only Owner & Sudo).
+/{BotCommands.UserSetCommand} [query]: User settings.
 /{BotCommands.BotSetCommand} [query]: Bot settings.
 /{BotCommands.BtSelectCommand}: Select files from torrents by gid or reply.
-/{BotCommands.CancelMirror}: Cancel task by gid or reply.
-/{BotCommands.CancelAllCommand} [query]: Cancel all [status] tasks.
-/{BotCommands.ListCommand} [query]: Search in Google Drive(s).
-/{BotCommands.SearchCommand} [query]: Search for torrents with API.
-/{BotCommands.StatusCommand}: Shows a status of all the downloads.
-/{BotCommands.StatsCommand}: Show stats of the machine where the bot is hosted in.
-/{BotCommands.PingCommand}: Check how long it takes to Ping the Bot (Only Owner & Sudo).
-/{BotCommands.AuthorizeCommand}: Authorize a chat or a user to use the bot (Only Owner & Sudo).
-/{BotCommands.UnAuthorizeCommand}: Unauthorize a chat or a user to use the bot (Only Owner & Sudo).
-/{BotCommands.UsersCommand}: show users settings (Only Owner & Sudo).
-/{BotCommands.AddSudoCommand}: Add sudo user (Only Owner).
-/{BotCommands.RmSudoCommand}: Remove sudo users (Only Owner).
-/{BotCommands.RestartCommand}: Restart and update the bot (Only Owner & Sudo).
-/{BotCommands.LogCommand}: Get a log file of the bot. Handy for getting crash reports (Only Owner & Sudo).
-/{BotCommands.ShellCommand}: Run shell commands (Only Owner).
-/{BotCommands.EvalCommand}: Run Python Code Line | Lines (Only Owner).
-/{BotCommands.ExecCommand}: Run Commands In Exec (Only Owner).
-/{BotCommands.ClearLocalsCommand}: Clear {BotCommands.EvalCommand} or {BotCommands.ExecCommand} locals (Only Owner).
+/{BotCommands.CancelMirror}: Cancels task by gid or reply.
+/{BotCommands.CancelAllCommand} [query]: Cancels all [status] tasks.
+/{BotCommands.ListCommand} [query]: Searches in Google Drive(s).
+/{BotCommands.SearchCommand} [query]: Searches for torrents with API.
+/{BotCommands.StatusCommand}: Shows status of all downloads.
+/{BotCommands.StatsCommand}: Shows stats of the machine hosting the bot.
+/{BotCommands.PingCommand}: Checks how long it takes to ping the bot (Only Owner & Sudo).
+/{BotCommands.AuthorizeCommand}: Authorizes a chat or a user to use the bot (Only Owner & Sudo).
+/{BotCommands.UnAuthorizeCommand}: Unauthorizes a chat or a user to use the bot (Only Owner & Sudo).
+/{BotCommands.UsersCommand}: Shows user settings (Only Owner & Sudo).
+/{BotCommands.AddSudoCommand}: Adds sudo user (Only Owner).
+/{BotCommands.RmSudoCommand}: Removes sudo users (Only Owner).
+/{BotCommands.RestartCommand}: Restarts and updates the bot (Only Owner & Sudo).
+/{BotCommands.LogCommand}: Gets a log file of the bot. Handy for getting crash reports (Only Owner & Sudo).
+/{BotCommands.ShellCommand}: Runs shell commands (Only Owner).
+/{BotCommands.EvalCommand}: Runs Python code line or lines (Only Owner).
+/{BotCommands.ExecCommand}: Runs commands in Exec (Only Owner).
+/{BotCommands.ClearLocalsCommand}: Clears {BotCommands.EvalCommand} or {BotCommands.ExecCommand} locals (Only Owner).
 /{BotCommands.RssCommand}: RSS Menu.
 '''
 
