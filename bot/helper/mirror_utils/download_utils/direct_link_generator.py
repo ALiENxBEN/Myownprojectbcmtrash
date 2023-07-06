@@ -11,7 +11,7 @@ from bs4 import BeautifulSoup
 from cloudscraper import create_scraper
 from lk21 import Bypass
 from lxml import etree
-from requests import session
+from requests import session, get
 
 import requests
 
