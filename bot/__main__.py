@@ -283,6 +283,15 @@ async def restart_notification():
         except:
             pass
         await aioremove(".restartmsg")
+        
+
+@new_task
+async def new_mem(_, message):
+    buttons = ButtonMaker()
+    buttons.ubutton('JOIN NOW', 'https://t.me/SivaSoft_Update')
+    buttons.ubutton('OWNER', 'https://t.me/Siva_Soft')
+    await sendMessage(message, f"<b>• Hello there</b> </code>{message.from_user.first_name}</code>,</b>\n• Welcome to M|L Group.\n• Enjoy in Mirror/Leech Party\n╭ <b>First Name:</b> <code>{message.from_user.first_name}</code>\n<b>├ Last Name:</b> <code>{message.from_user.last_name}</code>\n├ <b>Username:</b> {message.from_user.username}\n├ <b>ID:</b> {message.from_user.id}\n╰ <b>Premium User:</b> {message.from_user.is_premium} ", buttons.build_menu(2), 'https://graph.org/file/f34e0aaf6f61256532932.png')
+    #await auto_delete_message(message, reply)
 
 
 async def main():
@@ -304,6 +313,7 @@ async def main():
     bot.add_handler(MessageHandler(stats, filters=command(
         BotCommands.StatsCommand) & CustomFilters.authorized))
     bot.add_handler(CallbackQueryHandler(wzmlxcb, filters=regex(r'^wzmlx')))
+    bot.add_handler(MessageHandler(new_mem, filters=new_chat_members))
     LOGGER.info("Bot Started!")
     signal(SIGINT, exit_clean_up)
 
