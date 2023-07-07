@@ -26,7 +26,7 @@ from .helper.ext_utils.fs_utils import start_cleanup, clean_all, exit_clean_up
 from .helper.ext_utils.bot_utils import get_progress_bar_string, get_readable_file_size, get_readable_time, cmd_exec, sync_to_async, set_commands, update_user_ldata, new_thread, format_validity_time, new_task
 from .helper.ext_utils.db_handler import DbManger
 from .helper.telegram_helper.bot_commands import BotCommands
-from .helper.telegram_helper.message_utils import sendMessage, editMessage, sendFile, deleteMessage, one_minute_del
+from .helper.telegram_helper.message_utils import sendMessage, editMessage, sendFile, deleteMessage, one_minute_del, delete_links
 from .helper.telegram_helper.filters import CustomFilters
 from .helper.telegram_helper.button_build import ButtonMaker
 from .helper.listeners.aria2_listener import start_aria2_listener
@@ -290,8 +290,8 @@ async def new_mem(_, message):
     buttons = ButtonMaker()
     buttons.ubutton('JOIN NOW', 'https://t.me/SivaSoft_Update')
     buttons.ubutton('OWNER', 'https://t.me/Siva_Soft')
-    await sendMessage(message, f"<b>• Hello there</b> </code>{message.from_user.first_name}</code>,</b>\n• Welcome to M|L Group.\n• Enjoy in Mirror/Leech Party\n╭ <b>First Name:</b> <code>{message.from_user.first_name}</code>\n<b>├ Last Name:</b> <code>{message.from_user.last_name}</code>\n├ <b>Username:</b> {message.from_user.username}\n├ <b>ID:</b> {message.from_user.id}\n╰ <b>Premium User:</b> {message.from_user.is_premium} ", buttons.build_menu(2), 'https://graph.org/file/f34e0aaf6f61256532932.png')
-    #await auto_delete_message(message, reply)
+    reply = await sendMessage(message, f"<b>• Hello there</b> </code>{message.from_user.first_name}</code>,</b>\n• Welcome to M|L Group.\n• Enjoy in Mirror/Leech Party\n╭ <b>First Name:</b> <code>{message.from_user.first_name}</code>\n<b>├ Last Name:</b> <code>{message.from_user.last_name}</code>\n├ <b>Username:</b> {message.from_user.username}\n├ <b>ID:</b> {message.from_user.id}\n╰ <b>Premium User:</b> {message.from_user.is_premium} ", buttons.build_menu(2), 'https://graph.org/file/f34e0aaf6f61256532932.png')
+    await delete_links(message, reply)
 
 
 async def main():
