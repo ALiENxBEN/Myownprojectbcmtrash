@@ -18,7 +18,7 @@ from aiofiles.os import path as aiopath, remove as aioremove
 from aiofiles import open as aiopen
 from psutil import disk_usage, cpu_percent, swap_memory, cpu_count, cpu_freq, virtual_memory, net_io_counters, boot_time
 from pyrogram.handlers import MessageHandler, CallbackQueryHandler
-from pyrogram.filters import command, private, regex, new_chat_members
+from pyrogram.filters import command, private, regex
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from bot import bot, config_dict, user_data, botStartTime, LOGGER, Interval, DATABASE_URL, QbInterval, INCOMPLETE_TASK_NOTIFIER, scheduler
@@ -38,41 +38,40 @@ async def stats(_, message):
     total, used, free, disk = disk_usage('/')
     memory = virtual_memory()
     currentTime = get_readable_time(time() - botStartTime)
-    mem_p = memory.percent
     osUptime = get_readable_time(time() - boot_time())
     cpuUsage = cpu_percent(interval=0.5)
-    DIRECT_LIMIT = config_dict['DIRECT_LIMIT']
-    YTDLP_LIMIT = config_dict['YTDLP_LIMIT']
-    GDRIVE_LIMIT = config_dict['GDRIVE_LIMIT']
-    TORRENT_LIMIT = config_dict['TORRENT_LIMIT']
-    CLONE_LIMIT = config_dict['CLONE_LIMIT']
-    MEGA_LIMIT = config_dict['MEGA_LIMIT']
-    LEECH_LIMIT = config_dict['LEECH_LIMIT']
-    USER_MAX_TASKS = config_dict['USER_MAX_TASKS']
-    torrent_limit = '∞' if TORRENT_LIMIT == '' else f'{TORRENT_LIMIT}GB/Link'
-    clone_limit = '∞' if CLONE_LIMIT == '' else f'{CLONE_LIMIT}GB/Link'
-    gdrive_limit = '∞' if GDRIVE_LIMIT == '' else f'{GDRIVE_LIMIT}GB/Link'
-    mega_limit = '∞' if MEGA_LIMIT == '' else f'{MEGA_LIMIT}GB/Link'
-    leech_limit = '∞' if LEECH_LIMIT == '' else f'{LEECH_LIMIT}GB/Link'
-    user_task = '∞' if USER_MAX_TASKS == '' else f'{USER_MAX_TASKS} Tasks/user'
-    ytdlp_limit = '∞' if YTDLP_LIMIT == '' else f'{YTDLP_LIMIT}GB/Link'
-    direct_limit = '∞' if DIRECT_LIMIT == '' else f'{DIRECT_LIMIT}GB/Link'
-    stats = f'<b>SYSTEM INFO</b>\n\n'\
+    
+    limit_mapping = {
+        'Torrent': config_dict.get('TORRENT_LIMIT', '∞'),
+        'Gdrive': config_dict.get('GDRIVE_LIMIT', '∞'),
+        'Ytdlp': config_dict.get('YTDLP_LIMIT', '∞'),
+        'Direct': config_dict.get('DIRECT_LIMIT', '∞'),
+        'Leech': config_dict.get('LEECH_LIMIT', '∞'),
+        'Clone': config_dict.get('CLONE_LIMIT', '∞'),
+        'Mega': config_dict.get('MEGA_LIMIT', '∞'),
+        'User tasks': config_dict.get('USER_MAX_TASKS', '∞'),
+    }
+
+    system_info = f'<b>SYSTEM INFO</b>\n\n'\
             f'<code>• Bot uptime :</code> {currentTime}\n'\
             f'<code>• Sys uptime :</code> {osUptime}\n'\
             f'<code>• CPU usage  :</code> {cpuUsage}%\n'\
-            f'<code>• RAM usage  :</code> {mem_p}%\n'\
+            f'<code>• RAM usage  :</code> {memory.percent}%\n'\
             f'<code>• Disk usage :</code> {disk}%\n'\
-            f'<code>• Disk space :</code> {get_readable_file_size(free)}/{get_readable_file_size(total)}\n\n'\
-            f'<b>LIMITATIONS</b>\n\n'\
-            f'<code>• Torrent    :</code> {torrent_limit}\n'\
-            f'<code>• Gdrive     :</code> {gdrive_limit}\n'\
-            f'<code>• Ytdlp      :</code> {ytdlp_limit}\n'\
-            f'<code>• Direct     :</code> {direct_limit}\n'\
-            f'<code>• Leech      :</code> {leech_limit}\n'\
-            f'<code>• Clone      :</code> {clone_limit}\n'\
-            f'<code>• Mega       :</code> {mega_limit}\n'\
-            f'<code>• User tasks :</code> {user_task}\n\n'
+            f'<code>• Disk space :</code> {get_readable_file_size(free)}/{get_readable_file_size(total)}\n\n'
+            
+    limitations = f'<b>LIMITATIONS</b>\n\n'
+    
+    for k, v in limit_mapping.items():
+        if v == '':
+            v = '∞'
+        elif k != 'User tasks':
+            v = f'{v}GB/Link'
+        else:
+            v = f'{v} Tasks/user'
+        limitations += f'<code>• {k:<10}:</code> {v}\n'
+
+    stats = system_info + limitations
     reply_message = await sendMessage(message, stats, photo='IMAGES')
     await deleteMessage(message)
     await one_minute_del(reply_message)
@@ -285,15 +284,6 @@ async def restart_notification():
         await aioremove(".restartmsg")
         
 
-@new_task
-async def new_mem(_, message):
-    buttons = ButtonMaker()
-    buttons.ubutton('JOIN NOW', 'https://t.me/SivaSoft_Update')
-    buttons.ubutton('OWNER', 'https://t.me/Siva_Soft')
-    reply = await sendMessage(message, f"<b>• Hello there</b> </code>{message.from_user.first_name}</code>,</b>\n• Welcome to M|L Group.\n• Enjoy in Mirror/Leech Party\n╭ <b>First Name:</b> <code>{message.from_user.first_name}</code>\n<b>├ Last Name:</b> <code>{message.from_user.last_name}</code>\n├ <b>Username:</b> {message.from_user.username}\n├ <b>ID:</b> {message.from_user.id}\n╰ <b>Premium User:</b> {message.from_user.is_premium} ", buttons.build_menu(2), 'https://graph.org/file/f34e0aaf6f61256532932.png')
-    await one_minute_del(reply)
-
-
 async def main():
     await gather(start_cleanup(), torrent_search.initiate_search_tools(), restart_notification(), search_images(), set_commands(bot))
     await sync_to_async(start_aria2_listener, wait=False)
@@ -313,7 +303,6 @@ async def main():
     bot.add_handler(MessageHandler(stats, filters=command(
         BotCommands.StatsCommand) & CustomFilters.authorized))
     bot.add_handler(CallbackQueryHandler(wzmlxcb, filters=regex(r'^wzmlx')))
-    bot.add_handler(MessageHandler(new_mem, filters=new_chat_members))
     LOGGER.info("Bot Started!")
     signal(SIGINT, exit_clean_up)
 
