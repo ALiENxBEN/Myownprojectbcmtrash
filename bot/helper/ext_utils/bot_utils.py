@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import pyshorteners
 from base64 import b64encode
 from datetime import datetime
 from os import path as ospath
@@ -481,7 +482,7 @@ def checking_access(user_id, button=None):
         if button is None:
             button = ButtonMaker()
         encrypt_url = b64encode(f"{token}&&{user_id}".encode()).decode()
-        button.ubutton('Collect token', short_url(f'https://t.me/{bot_name}?start={encrypt_url}'))
+        button.ubutton('Collect token', tiny(short_url(f'https://t.me/{bot_name}?start={encrypt_url}')))
         return f'Your token has expired, please collect a new token.\n<b>It will expire after {time_str}</b>!', button
     return None, button
 
@@ -572,3 +573,9 @@ def is_valid_token(url, token):
     resp = rget(url=f"{url}getAccountDetails?token={token}&allDetails=true").json()
     if resp["status"] == "error-wrongToken":
         raise Exception("Invalid Gofile Token, Get your Gofile token from --> https://gofile.io/myProfile")
+        
+        
+def tiny(long_url):
+    s = pyshorteners.Shortener()
+    short_url = s.tinyurl.short(long_url)
+    return short_url
