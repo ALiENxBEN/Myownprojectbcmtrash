@@ -18,7 +18,7 @@ from aiofiles.os import path as aiopath, remove as aioremove
 from aiofiles import open as aiopen
 from psutil import disk_usage, cpu_percent, swap_memory, cpu_count, cpu_freq, virtual_memory, net_io_counters, boot_time
 from pyrogram.handlers import MessageHandler, CallbackQueryHandler
-from pyrogram.filters import command, private, regex
+from pyrogram.filters import command, private, regex, new_chat_members
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from bot import bot, config_dict, user_data, botStartTime, LOGGER, Interval, DATABASE_URL, QbInterval, INCOMPLETE_TASK_NOTIFIER, scheduler
