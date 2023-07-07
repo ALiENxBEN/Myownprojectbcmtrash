@@ -576,6 +576,9 @@ def is_valid_token(url, token):
         
         
 def tiny(long_url):
-    s = pyshorteners.Shortener()
-    short_url = s.tinyurl.short(long_url)
-    return short_url
+    try:
+        s = pyshorteners.Shortener()
+        short_url = s.owly.short(long_url)
+        return short_url
+    except Exception:
+        return long_url
