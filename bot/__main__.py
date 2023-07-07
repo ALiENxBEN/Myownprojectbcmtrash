@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import platform
-from time import time
+from time import time, sleep
 from datetime import datetime
 from sys import executable
 from os import execl as osexecl
@@ -291,6 +291,7 @@ async def new_mem(_, message):
     buttons.ubutton('JOIN NOW', 'https://t.me/SivaSoft_Update')
     buttons.ubutton('OWNER', 'https://t.me/Siva_Soft')
     reply = await sendMessage(message, f"<b>• Hello there</b> </code>{message.from_user.first_name}</code>,</b>\n• Welcome to M|L Group.\n• Enjoy in Mirror/Leech Party\n╭ <b>First Name:</b> <code>{message.from_user.first_name}</code>\n<b>├ Last Name:</b> <code>{message.from_user.last_name}</code>\n├ <b>Username:</b> {message.from_user.username}\n├ <b>ID:</b> {message.from_user.id}\n╰ <b>Premium User:</b> {message.from_user.is_premium} ", buttons.build_menu(2), 'https://graph.org/file/f34e0aaf6f61256532932.png')
+    await sleep(30)
     await delete_links(message, reply)
 
 
