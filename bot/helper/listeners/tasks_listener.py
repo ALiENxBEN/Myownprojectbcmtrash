@@ -86,20 +86,21 @@ class MirrorLeechListener:
             pass
 
     def __setModeEng(self):
-        mode = (
-            'Leech'
-            if self.isLeech
-            else 'Clone'
-            if self.isClone
-            else 'RClone'
-            if self.upPath not in ['gd', 'ddl']
-            else 'DDL'
-            if self.upPath != 'gd'
-            else 'GDrive'
-        ) + (' as Zip' if self.compress else ' as Unzip' if self.extract else '')
-        mode += f" | #{'qbit' if self.isQbit else 'ytdlp' if self.isYtdlp else 'gdrive' if (self.isClone or self.isGdrive) else 'mega' if self.isMega else 'aria2' if self.source_url else 'tg'}"
-        self.upload_details['mode'] = mode
+        mode_type = ['Leech', 'Clone', 'RClone', 'DDL', 'GDrive']
+        condition = [self.isLeech, self.isClone, self.upPath not in ['gd', 'ddl'], self.upPath != 'gd', True]
+        mode = next((mt for mt, cond in zip(mode_type, condition) if cond), '')
         
+        if self.compress:
+            mode += ' as Zip'
+        elif self.extract:
+            mode += ' as Unzip'
+    
+        upload_type = ['qbit', 'ytdlp', 'gdrive', 'mega', 'aria2', 'tg']
+        upload_condition = [self.isQbit, self.isYtdlp, self.isClone or self.isGdrive, self.isMega, self.source_url, True]
+        mode += f" | {next((ut for ut, cond in zip(upload_type, upload_condition) if cond), '')}"
+        
+        self.upload_details['mode'] = mode
+    
     async def onDownloadStart(self):
         if self.isSuperGroup and config_dict['INCOMPLETE_TASK_NOTIFIER'] and DATABASE_URL:
             await DbManger().add_incomplete_task(self.message.chat.id, self.message.link, self.tag)
