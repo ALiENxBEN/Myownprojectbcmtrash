@@ -86,19 +86,35 @@ class MirrorLeechListener:
             pass
 
     def __setModeEng(self):
-        mode_type = ['Leech', 'Clone', 'RClone', 'DDL', 'GDrive']
-        condition = [self.isLeech, self.isClone, self.upPath not in ['gd', 'ddl'], self.upPath != 'gd', True]
-        mode = next((mt for mt, cond in zip(mode_type, condition) if cond), '')
+        # Mode Type
+        if self.isLeech:
+            mode = 'Leech'
+        elif self.isClone:
+            mode = 'Clone'
+        elif self.upPath not in ['gd', 'ddl']:
+            mode = 'RClone'
+        elif self.upPath != 'gd':
+            mode = 'DDL'
+        else:
+            mode = 'GDrive'
         
-        if self.compress:
-            mode += ' as Zip'
-        elif self.extract:
-            mode += ' as Unzip'
-    
-        upload_type = ['qbit', 'ytdlp', 'gdrive', 'mega', 'aria2', 'tg']
-        upload_condition = [self.isQbit, self.isYtdlp, self.isClone or self.isGdrive, self.isMega, self.source_url, True]
-        mode += f" | {next((ut for ut, cond in zip(upload_type, upload_condition) if cond), 'tg')}"
+        mode += ' as Zip' if self.compress else ' as Unzip' if self.extract else ''
         
+        # Upload Type
+        if self.isQbit:
+            upload_type = 'qbit'
+        elif self.isYtdlp:
+            upload_type = 'ytdlp'
+        elif self.isClone or self.isGdrive:
+            upload_type = 'gdrive'
+        elif self.isMega:
+            upload_type = 'mega'
+        elif self.source_url:
+            upload_type = 'aria2'
+        else:
+            upload_type = 'tg'
+        
+        mode += f" | {upload_type}"
         self.upload_details['mode'] = mode
     
     async def onDownloadStart(self):
