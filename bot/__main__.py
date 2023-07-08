@@ -51,8 +51,7 @@ async def stats(_, message):
         'Mega': config_dict.get('MEGA_LIMIT', '∞'),
         'User tasks': config_dict.get('USER_MAX_TASKS', '∞'),
     }
-    speech = f'<b>{quote}</b>\n\n'
-    system_info = f'<b>SYSTEM INFO</b>\n\n'\
+    system_info = f'<b>{quote}</b>\n\n'\
             f'<code>• Bot uptime :</code> {currentTime}\n'\
             f'<code>• Sys uptime :</code> {osUptime}\n'\
             f'<code>• CPU usage  :</code> {cpuUsage}%\n'\
@@ -71,7 +70,7 @@ async def stats(_, message):
             v = f'{v} Tasks/user'
         limitations += f'<code>• {k:<10}:</code> {v}\n'
 
-    stats = speech + system_info + limitations
+    stats = system_info + limitations
     reply_message = await sendMessage(message, stats, photo='IMAGES')
     await deleteMessage(message)
     await one_minute_del(reply_message)
