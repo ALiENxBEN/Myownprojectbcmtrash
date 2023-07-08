@@ -97,7 +97,7 @@ class MirrorLeechListener:
     
         upload_type = ['qbit', 'ytdlp', 'gdrive', 'mega', 'aria2', 'tg']
         upload_condition = [self.isQbit, self.isYtdlp, self.isClone or self.isGdrive, self.isMega, self.source_url, True]
-        mode += f" | {next((ut for ut, cond in zip(upload_type, upload_condition) if cond), '')}"
+        mode += f" | {next((ut for ut, cond in zip(upload_type, upload_condition) if cond), 'tg')}"
         
         self.upload_details['mode'] = mode
     
