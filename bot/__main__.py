@@ -40,7 +40,7 @@ async def stats(_, message):
     currentTime = get_readable_time(time() - botStartTime)
     osUptime = get_readable_time(time() - boot_time())
     cpuUsage = cpu_percent(interval=0.5)
-    
+    quote = Quote.print().split('―', 1)[0].strip().replace("“", "").replace("”", "")
     limit_mapping = {
         'Torrent': config_dict.get('TORRENT_LIMIT', '∞'),
         'Gdrive': config_dict.get('GDRIVE_LIMIT', '∞'),
@@ -51,7 +51,7 @@ async def stats(_, message):
         'Mega': config_dict.get('MEGA_LIMIT', '∞'),
         'User tasks': config_dict.get('USER_MAX_TASKS', '∞'),
     }
-
+    speech = f'<b>{quote}</b>\n\n'
     system_info = f'<b>SYSTEM INFO</b>\n\n'\
             f'<code>• Bot uptime :</code> {currentTime}\n'\
             f'<code>• Sys uptime :</code> {osUptime}\n'\
@@ -71,7 +71,7 @@ async def stats(_, message):
             v = f'{v} Tasks/user'
         limitations += f'<code>• {k:<10}:</code> {v}\n'
 
-    stats = system_info + limitations
+    stats = speech + system_info + limitations
     reply_message = await sendMessage(message, stats, photo='IMAGES')
     await deleteMessage(message)
     await one_minute_del(reply_message)
@@ -168,7 +168,7 @@ async def wzmlxcb(_, query):
             await query.edit_message_reply_markup(None)
         except Exception as err:
             LOGGER.error(f"TG Log Display : {str(err)}")
-    else: # More Whole Bot CB Usage !!
+    else:
         await query.answer()
         await message.delete()
     
