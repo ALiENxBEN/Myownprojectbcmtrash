@@ -68,7 +68,7 @@ async def stats(_, message):
             v = f'{v}GB/Link'
         else:
             v = f'{v} Tasks/user'
-        limitations += f'<code>• {k:<10}:</code> {v}\n'
+        limitations += f'<code>• {k:<11}:</code> {v}\n'
 
     stats = system_info + limitations
     reply_message = await sendMessage(message, stats, photo='IMAGES')
