@@ -139,17 +139,22 @@ def handleIndex(index, dic):
     return index
 
 def get_progress_bar_string(pct):
-    pct = float(str(pct).strip('%'))
-    p = min(max(pct, 0), 100)
-    cFull = int(p / 10)
-    cIncomplete = int(round((p / 10 - cFull) * 4))
-    p_str = '●' * cFull
-    if cIncomplete > 0:
-        s = '◔◑◕●'
-        incomplete_char = s[cIncomplete - 1]
-        p_str += incomplete_char
-    p_str += '○' * (10 - len(p_str))
-    return p_str
+    SYM_LIST = ['▏', '▎', '▍', '▌', '▋', '▊', '▉', '█']
+
+    pct = min(max(float(str(pct).strip('%')), 0), 100)
+    total_blocks, filled_blocks = 10, int(pct * 10 / 100)
+    remaining_blocks = total_blocks - filled_blocks
+
+    filled_str = '█' * filled_blocks
+    remaining_str = '▏' * remaining_blocks
+
+    if remaining_blocks > 0:
+        remaining_pct = ((pct * total_blocks) % 100) / 100
+        idx = min(int(remaining_pct * len(SYM_LIST)), len(SYM_LIST) - 1)
+        filled_str += SYM_LIST[idx]
+        remaining_str = remaining_str[1:]
+
+    return filled_str + remaining_str
 
 class EngineStatus:
     STATUS_ARIA = "Aria2"
