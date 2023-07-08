@@ -177,7 +177,7 @@ def source(self):
             source = reply_to.from_user.username or reply_to.from_user.id
     return source
             
-
+STATUS_LIMIT = 2
 def get_readable_message():
     tasks = len(download_dict)
     if not tasks:
