@@ -146,7 +146,7 @@ def get_progress_bar_string(pct):
     remaining_blocks = total_blocks - filled_blocks
 
     filled_str = '█' * filled_blocks
-    remaining_str = '  ' * remaining_blocks
+    remaining_str = ' ㅤ' * remaining_blocks
 
     if remaining_blocks > 0:
         remaining_pct = ((pct * total_blocks) % 100) / 100
