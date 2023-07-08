@@ -184,8 +184,8 @@ def get_readable_message():
     STATUS_LIMIT = config_dict['STATUS_LIMIT']
     tasks = len(download_dict)
     currentTime = get_readable_time(time() - botStartTime)
-    if config_dict['BOT_MAX_TASK']:
-        bmax_task = f"/config_dict['BOT_MAX_TASK']"
+    if config_dict['BOT_MAX_TASKS']:
+        bmax_task = f"/{config_dict['BOT_MAX_TASKS']}"
     else:
         bmax_task = ''
     globals()['PAGES'] = (tasks + STATUS_LIMIT - 1) // STATUS_LIMIT
