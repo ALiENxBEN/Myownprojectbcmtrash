@@ -163,8 +163,10 @@ async def wzmlxcb(_, query):
                 ind += 1
             startLine = f"<b>Showing Last {ind} Lines from log.txt:</b> \n\n----------<b>START LOG</b>----------\n\n"
             endLine = "\n----------<b>END LOG</b>----------"
-            await sendMessage(message, startLine + escape(Loglines) + endLine)
+            reply_message = await sendMessage(message, startLine + escape(Loglines) + endLine)
             await query.edit_message_reply_markup(None)
+            await deleteMessage(message)
+            await one_minute_del(reply_message)
         except Exception as err:
             LOGGER.error(f"TG Log Display : {str(err)}")
     else:
@@ -237,9 +239,11 @@ NOTE: Try each command without any arguments to see more details.
 /{BotCommands.RssCommand}: RSS Menu.
 '''
 
-
+@new_task
 async def bot_help(client, message):
-    await sendMessage(message, help_string)
+    reply_message = await sendMessage(message, help_string)
+    await deleteMessage(message)
+    await one_minute_del(reply_message)
 
 
 async def restart_notification():
