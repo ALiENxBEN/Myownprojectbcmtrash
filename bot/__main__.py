@@ -26,7 +26,7 @@ from .helper.ext_utils.fs_utils import start_cleanup, clean_all, exit_clean_up
 from .helper.ext_utils.bot_utils import get_progress_bar_string, get_readable_file_size, get_readable_time, cmd_exec, sync_to_async, set_commands, update_user_ldata, new_thread, format_validity_time, new_task
 from .helper.ext_utils.db_handler import DbManger
 from .helper.telegram_helper.bot_commands import BotCommands
-from .helper.telegram_helper.message_utils import sendMessage, editMessage, sendFile, deleteMessage, one_minute_del, delete_links
+from .helper.telegram_helper.message_utils import sendMessage, editMessage, sendFile, deleteMessage, one_minute_del
 from .helper.telegram_helper.filters import CustomFilters
 from .helper.telegram_helper.button_build import ButtonMaker
 from .helper.listeners.aria2_listener import start_aria2_listener
@@ -165,7 +165,7 @@ async def wzmlxcb(_, query):
             endLine = "\n----------<b>END LOG</b>----------"
             reply_message = await sendMessage(message, startLine + escape(Loglines) + endLine)
             await query.edit_message_reply_markup(None)
-            await delete_links(message)
+            await deleteMessage(message)
             await one_minute_del(reply_message)
         except Exception as err:
             LOGGER.error(f"TG Log Display : {str(err)}")
@@ -173,11 +173,13 @@ async def wzmlxcb(_, query):
         await query.answer()
         await message.delete()
     
-
+@new_task
 async def log(_, message):
     buttons = ButtonMaker()
     buttons.ibutton('Log Display', f'wzmlx {message.from_user.id} logdisplay')
-    await sendFile(message, 'log.txt', buttons=buttons.build_menu(1))
+    reply_message = await sendFile(message, 'log.txt', buttons=buttons.build_menu(1))
+    await deleteMessage(message)
+    await one_minute_del(reply_message)
 
 async def search_images():
     if not config_dict['IMG_SEARCH']:
