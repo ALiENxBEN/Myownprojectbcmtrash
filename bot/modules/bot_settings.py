@@ -404,13 +404,13 @@ async def load_config():
 <b>Hashtag</b>: {hashtag}
 <b>Studios</b>: {studios}
 
-<b>Description</b>: <i>{description}</i>'''
+<b>Description</b>: {description}'''
 
     MDL_TEMPLATE = environ.get('MDL_TEMPLATE', '')
     if len(MDL_TEMPLATE) == 0:
         MDL_TEMPLATE = '''<b>Title:</b> {title}
 <b>Also Known As:</b> {aka}
-<b>Rating ⭐️:</b> <i>{rating}</i>
+<b>Rating ⭐️:</b> {rating}
 <b>Release Info:</b> {aired_date}
 <b>Genre:</b> {genres}
 <b>MyDramaList URL:</b> {url}
@@ -626,9 +626,9 @@ Timeout: 60 sec'''
                                  'TELEGRAM_API', 'AUTHORIZED_CHATS', 'DATABASE_URL', 'BOT_TOKEN', 'DOWNLOAD_DIR']:
             msg += '<b>Note:</b> Restart required for this edit to take effect!\n\n'
         if edit_mode and key not in bool_vars:
-            msg += '<i>Send a valid value for the above Var.</i> <b>Timeout:</b> 60 sec'
+            msg += 'Send a valid value for the above Var. <b>Timeout:</b> 60 sec'
         if key in bool_vars:
-            msg += '<i>Choose a valid value for the above Var</i>'
+            msg += 'Choose a valid value for the above Var'
             buttons.ibutton('True', f"botset boolvar {key} on")
             buttons.ibutton('False', f"botset boolvar {key} off")
     elif edit_type == 'editaria':

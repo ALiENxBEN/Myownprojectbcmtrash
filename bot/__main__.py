@@ -85,10 +85,10 @@ async def start(client, message):
         encrypted_url = message.command[1]
         input_token, pre_uid = (b64decode(encrypted_url.encode()).decode()).split('&&')
         if int(pre_uid) != userid:
-            return await sendMessage(message, '<b>This token is not for you!</b>\n\n<i>Please generate your own.</i>')
+            return await sendMessage(message, '<b>This token is not for you!</b>\n\nPlease generate your own.')
         data = user_data.get(userid, {})
         if 'token' not in data or data['token'] != input_token:
-            return await sendMessage(message, '<b>This token has already been used!</b>\n\n<i>Please get a new one.</i>')
+            return await sendMessage(message, '<b>This token has already been used!</b>\n\nPlease get a new one.')
         buttons.ibutton('Activate token', f'pass {input_token}', 'header')
         reply_markup = buttons.build_menu(2)
         msg = 'Your token has been successfully generated!\n\n'
