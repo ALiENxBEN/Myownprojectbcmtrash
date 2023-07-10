@@ -58,12 +58,10 @@ class TgUploader:
             if self.__mediainfo:
                 buttons.ubutton(BotTheme('MEDIAINFO_LINK'), await get_mediainfo_link(up_path))
         except Exception as e:
-            LOGGER.error("MediaInfo Error: "+str(e))
+            LOGGER.error(f"MediaInfo Error: {str(e)}")
         if config_dict['SAVE_MSG'] and (config_dict['LEECH_LOG_ID'] or not self.__listener.isPrivate):
             buttons.ibutton(BotTheme('SAVE_MSG'), 'save', 'footer')
-        if self.__has_buttons:
-            return buttons.build_menu(1)
-        return None
+        return buttons.build_menu(1) if self.__has_buttons else None
 
     async def __copy_file(self):
         try:
