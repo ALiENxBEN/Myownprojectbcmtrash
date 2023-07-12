@@ -52,7 +52,7 @@ class MirrorStatus:
     STATUS_QUEUEUP = "ยℓ 𝐐ᵘｅᵘｅĎ"
     STATUS_PAUSED = "ᑭᗩᑌՏᗴᗪ"
     STATUS_ARCHIVING = "ąཞƈɧı۷ıŋɠ""
-    STATUS_EXTRACTING = "E‌x‌t‌r‌a‌c‌t‌i‌n‌g‌"
+    STATUS_EXTRACTING = "🅔🅧🅣🅡🅐🅒🅣🅘🅝🅖"
     STATUS_SPLITTING = "⚠️ֆքʟɨȶȶɨռɢ"
     STATUS_CHECKING = "CheckUp"
     STATUS_SEEDING = "Seeding"
