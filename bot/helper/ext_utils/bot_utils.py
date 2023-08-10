@@ -191,17 +191,17 @@ def get_readable_message():
         globals()['STATUS_START'] = STATUS_LIMIT * (PAGES - 1)
         globals()['PAGE_NO'] = PAGES
     for download in list(download_dict.values())[STATUS_START:STATUS_LIMIT+STATUS_START]:
-        msg += f"{escape(f'{download.name()}')}\n"
+        msg += f"<b>_____《 <a href='https://t.me/NUMBER03ANURAG'>⋆⋆  🎀  𝒜𝒩𝒰𝑅𝒜𝒢𝓍𝐵𝐸𝒩  🎀  ⋆⋆</a> 》_____</b>\n\n"
         msg += f"by {source(download)}\n\n"
-        msg += f"<b>┌ {download.status()}...</b>"
+        msg += f"<b>☞ {download.status()}</b>: <code>{escape(f'{download.name()}')}</code>"
         if download.status() not in [MirrorStatus.STATUS_SPLITTING, MirrorStatus.STATUS_SEEDING]:
-            msg += f"\n<b>├ {get_progress_bar_string(download.progress())}</b> {download.progress()}"
-            msg += f"\n<b>├ </b>{download.processed_bytes()} of {download.size()}"
-            msg += f"\n<b>├ Speed</b>: {download.speed()}"
+            msg += f"\n<b>☞</b> <a href='https://t.me/NUMBER03ANURAG'>{get_progress_bar_string(download.progress())}</a> {download.progress()}"
+            msg += f"\n<b>☞ Processed</b>: {download.processed_bytes()} of {download.size()}"
+            msg += f"\n<b>☞ Speed</b>: {download.speed()} | <b>ETA</b>: {download.eta()}"
             msg += f'\n<b>├ Estimated</b>: {download.eta()}'
             if hasattr(download, 'seeders_num'):
                 try:
-                    msg += f"\n<b>├ Seeders</b>: {download.seeders_num()} | <b>Leechers</b>: {download.leechers_num()}"
+                    msg += f"\n<b>☞ Seeders</b>: {download.seeders_num()} | <b>Leechers</b>: {download.leechers_num()}"
                 except:
                     pass
         elif download.status() == MirrorStatus.STATUS_SEEDING:
