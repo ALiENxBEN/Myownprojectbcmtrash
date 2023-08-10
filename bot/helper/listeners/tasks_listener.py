@@ -372,7 +372,8 @@ class MirrorLeechListener:
         name, _ = await format_filename(name, user_id, isMirror=not self.isLeech)
         user_dict = user_data.get(user_id, {})
         msg = BotTheme('NAME', Name=escape(name))
-        msg += BotTheme('SIZE', Size=get_readable_file_size(size))
+        msg += f"<b>_____《 <a href='https://t.me/NUMBER03ANURAG'>⋆⋆  🎀  𝒜𝒩𝒰𝑅𝒜𝒢𝓍𝐵𝐸𝒩  🎀  ⋆⋆</a> 》_____</b>\n\n<b>☞ Name: </b><code>{escape(name)}</code>\n<b>☞ Size: </b>{get_readable_file_size(size)}"
+        LOGGER.info(f'Task Done: {name}')
         msg += BotTheme('ELAPSE', Time=get_readable_time(time() - self.message.date.timestamp()))
         msg += BotTheme('MODE', Mode=self.upload_details['mode'])
         LOGGER.info(f'Task Done: {name}')
